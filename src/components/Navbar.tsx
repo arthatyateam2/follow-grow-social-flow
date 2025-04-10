@@ -1,11 +1,31 @@
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 
-const Navbar = () => {
+interface NavbarProps {
+  onAuthClick?: () => void;
+}
+
+const Navbar = ({ onAuthClick }: NavbarProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
+
+  const handleAuthButtonClick = () => {
+    if (onAuthClick) {
+      onAuthClick();
+    } else {
+      navigate('/auth');
+    }
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-100">
@@ -25,15 +45,32 @@ const Navbar = () => {
             <Link to="/" className="text-gray-600 hover:text-gray-900 text-sm font-medium">
               How it Works
             </Link>
-            <Link to="/" className="text-gray-600 hover:text-gray-900 text-sm font-medium">
+            <Link to="/dashboard" className="text-gray-600 hover:text-gray-900 text-sm font-medium">
               Discover
             </Link>
-            <Button variant="outline" className="ml-2">
-              Sign In
-            </Button>
-            <Button className="bg-instagram-purple hover:bg-opacity-90">
-              Get Started
-            </Button>
+            
+            {user ? (
+              <>
+                <Link to="/dashboard" className="text-gray-600 hover:text-gray-900 text-sm font-medium">
+                  Dashboard
+                </Link>
+                <Button variant="outline" onClick={handleSignOut}>
+                  Sign Out
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="outline" onClick={handleAuthButtonClick}>
+                  Sign In
+                </Button>
+                <Button 
+                  className="bg-instagram-purple hover:bg-opacity-90"
+                  onClick={handleAuthButtonClick}
+                >
+                  Get Started
+                </Button>
+              </>
+            )}
           </nav>
 
           {/* Mobile menu button */}
@@ -68,19 +105,40 @@ const Navbar = () => {
               How it Works
             </Link>
             <Link 
-              to="/" 
+              to="/dashboard" 
               className="block text-gray-600 hover:text-gray-900 text-base font-medium py-2"
               onClick={() => setIsMenuOpen(false)}
             >
               Discover
             </Link>
+            
             <div className="pt-2 space-y-3">
-              <Button variant="outline" className="w-full">
-                Sign In
-              </Button>
-              <Button className="w-full bg-instagram-purple hover:bg-opacity-90">
-                Get Started
-              </Button>
+              {user ? (
+                <>
+                  <Link 
+                    to="/dashboard" 
+                    className="block text-gray-600 hover:text-gray-900 text-base font-medium py-2"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
+                  <Button variant="outline" className="w-full" onClick={handleSignOut}>
+                    Sign Out
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button variant="outline" className="w-full" onClick={handleAuthButtonClick}>
+                    Sign In
+                  </Button>
+                  <Button 
+                    className="w-full bg-instagram-purple hover:bg-opacity-90"
+                    onClick={handleAuthButtonClick}
+                  >
+                    Get Started
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>

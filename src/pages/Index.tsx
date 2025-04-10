@@ -1,14 +1,15 @@
 
-import { useState } from "react";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import HowItWorks from "@/components/HowItWorks";
 import ProfileCard from "@/components/ProfileCard";
 import Footer from "@/components/Footer";
-import AuthForm from "@/components/AuthForm";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Users, UserPlus, TrendingUp, Activity } from "lucide-react";
 import StatsCard from "@/components/StatsCard";
+import { useAuth } from "@/context/AuthContext";
 
 const profiles = [
   {
@@ -16,14 +17,16 @@ const profiles = [
     followers: 2456,
     following: 867,
     avatar: "https://i.pravatar.cc/150?img=32",
-    category: "Travel"
+    category: "Travel",
+    instagramHandle: "travel_addict"
   },
   {
     username: "food_lover_92",
     followers: 1280,
     following: 432,
     avatar: "https://i.pravatar.cc/150?img=26",
-    category: "Food & Dining"
+    category: "Food & Dining",
+    instagramHandle: "food_lover_92"
   },
   {
     username: "fitness_guru",
@@ -31,23 +34,36 @@ const profiles = [
     following: 1023,
     avatar: "https://i.pravatar.cc/150?img=33",
     category: "Fitness",
-    isFollowing: true
+    isFollowing: true,
+    instagramHandle: "fitness_guru"
   },
   {
     username: "photo_master",
     followers: 3421,
     following: 531,
     avatar: "https://i.pravatar.cc/150?img=48",
-    category: "Photography"
+    category: "Photography",
+    instagramHandle: "photo_master"
   }
 ];
 
 const Index = () => {
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    if (user) {
+      navigate('/dashboard');
+    }
+  }, [user, navigate]);
+  
+  const handleAuthClick = () => {
+    navigate('/auth');
+  };
   
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
+      <Navbar onAuthClick={handleAuthClick} />
       
       <main className="flex-grow">
         <HeroSection />
@@ -68,14 +84,14 @@ const Index = () => {
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {profiles.map((profile, index) => (
-                <ProfileCard key={index} {...profile} />
+                <ProfileCard key={index} {...profile} onFollow={handleAuthClick} />
               ))}
             </div>
             
             <div className="mt-12 text-center">
               <Button 
                 className="bg-instagram-purple hover:bg-opacity-90"
-                onClick={() => setIsAuthModalOpen(true)}
+                onClick={handleAuthClick}
               >
                 View More Profiles
                 <ArrowRight size={16} className="ml-2" />
@@ -141,17 +157,40 @@ const Index = () => {
                   our authentic follow exchange system. Start for free today and see results within days.
                 </p>
                 <div className="mt-8 space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
-                  <Button size="lg" className="bg-instagram-purple hover:bg-opacity-90">
+                  <Button size="lg" className="bg-instagram-purple hover:bg-opacity-90" onClick={handleAuthClick}>
                     Create Free Account
                   </Button>
-                  <Button size="lg" variant="outline">
+                  <Button size="lg" variant="outline" onClick={handleAuthClick}>
                     Learn More
                   </Button>
                 </div>
               </div>
               
               <div className="bg-white rounded-xl p-8 shadow-md border border-gray-200">
-                <AuthForm />
+                <div className="text-center mb-8">
+                  <h2 className="text-2xl font-bold instagram-gradient-text">
+                    Start Growing Today
+                  </h2>
+                  <p className="text-gray-600 mt-2">
+                    Create your account to begin connecting with other Instagram users
+                  </p>
+                </div>
+                
+                <div className="space-y-4">
+                  <Button 
+                    className="w-full bg-instagram-purple hover:bg-opacity-90"
+                    onClick={handleAuthClick}
+                  >
+                    Sign Up
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="w-full"
+                    onClick={handleAuthClick}
+                  >
+                    Sign In
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
@@ -159,8 +198,6 @@ const Index = () => {
       </main>
       
       <Footer />
-      
-      {/* Authentication Modal would go here in a real app */}
     </div>
   );
 };

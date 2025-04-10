@@ -8,7 +8,9 @@ interface ProfileCardProps {
   following: number;
   avatar: string;
   category?: string;
+  instagramHandle?: string;
   isFollowing?: boolean;
+  onFollow?: () => void;
 }
 
 const ProfileCard = ({ 
@@ -17,7 +19,9 @@ const ProfileCard = ({
   following, 
   avatar, 
   category = "Personal", 
-  isFollowing = false 
+  instagramHandle,
+  isFollowing = false,
+  onFollow 
 }: ProfileCardProps) => {
   return (
     <div className="rounded-xl overflow-hidden border border-gray-200 hover:shadow-lg transition-all bg-white">
@@ -49,22 +53,31 @@ const ProfileCard = ({
         </div>
         
         <div className="mt-5 space-y-2">
-          {isFollowing ? (
-            <Button variant="secondary" className="w-full">
-              <UserCheck size={16} className="mr-2" />
-              Following
-            </Button>
-          ) : (
-            <Button className="w-full bg-instagram-purple hover:bg-opacity-90">
-              <UserPlus size={16} className="mr-2" />
-              Follow
+          {onFollow && (
+            isFollowing ? (
+              <Button variant="secondary" className="w-full" onClick={onFollow}>
+                <UserCheck size={16} className="mr-2" />
+                Following
+              </Button>
+            ) : (
+              <Button className="w-full bg-instagram-purple hover:bg-opacity-90" onClick={onFollow}>
+                <UserPlus size={16} className="mr-2" />
+                Follow
+              </Button>
+            )
+          )}
+          
+          {instagramHandle && (
+            <Button 
+              variant="outline" 
+              className="w-full"
+              onClick={() => window.open(`https://instagram.com/${instagramHandle}`, '_blank')}
+            >
+              <Instagram size={16} className="mr-2" />
+              View on Instagram
+              <ExternalLink size={14} className="ml-2" />
             </Button>
           )}
-          <Button variant="outline" className="w-full">
-            <Instagram size={16} className="mr-2" />
-            View Profile
-            <ExternalLink size={14} className="ml-2" />
-          </Button>
         </div>
       </div>
     </div>
