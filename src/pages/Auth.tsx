@@ -64,12 +64,13 @@ const Auth = () => {
         if (formData.instagramHandle) {
           const { data: { user } } = await supabase.auth.getUser();
           if (user) {
+            // Using type assertion to work with our table
             const { error: updateError } = await supabase
               .from('profiles')
               .update({ 
                 instagram_handle: formData.instagramHandle,
                 username: formData.username || formData.email.split('@')[0]
-              })
+              } as any)
               .eq('id', user.id);
               
             if (updateError) console.error("Error updating profile:", updateError);

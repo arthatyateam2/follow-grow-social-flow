@@ -41,21 +41,23 @@ const Dashboard = () => {
 
   const fetchProfiles = async () => {
     try {
+      // Use type assertion to work with our table
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
-        .neq('id', user?.id || '')
-        .order('followers_count', { ascending: false });
+        .neq('id', user?.id || '') as { data: Profile[] | null, error: any };
       
       if (error) throw error;
       
-      // Add random avatars for demo purposes
-      const profilesWithAvatars = data.map((p: any) => ({
-        ...p,
-        avatar: `https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70)}`
-      }));
-      
-      setProfiles(profilesWithAvatars);
+      if (data) {
+        // Add random avatars for demo purposes
+        const profilesWithAvatars = data.map((p: any) => ({
+          ...p,
+          avatar: `https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70)}`
+        }));
+        
+        setProfiles(profilesWithAvatars);
+      }
     } catch (error) {
       console.error('Error fetching profiles:', error);
       toast({
@@ -72,14 +74,17 @@ const Dashboard = () => {
     if (!user) return;
     
     try {
+      // Use type assertion to work with our table
       const { data, error } = await supabase
         .from('follows')
         .select('following_id')
-        .eq('follower_id', user.id);
+        .eq('follower_id', user.id) as { data: { following_id: string }[] | null, error: any };
       
       if (error) throw error;
       
-      setFollowedUsers(data.map((item: any) => item.following_id));
+      if (data) {
+        setFollowedUsers(data.map((item) => item.following_id));
+      }
     } catch (error) {
       console.error('Error fetching followed users:', error);
     }
@@ -103,7 +108,7 @@ const Dashboard = () => {
         const { error } = await supabase
           .from('follows')
           .delete()
-          .match({ follower_id: user.id, following_id: profileId });
+          .match({ follower_id: user.id, following_id: profileId } as any);
         
         if (error) throw error;
         
@@ -113,10 +118,10 @@ const Dashboard = () => {
           description: 'You have unfollowed this user',
         });
       } else {
-        // Follow
+        // Follow - use type assertion for our table
         const { error } = await supabase
           .from('follows')
-          .insert({ follower_id: user.id, following_id: profileId });
+          .insert({ follower_id: user.id, following_id: profileId } as any);
         
         if (error) throw error;
         
@@ -143,9 +148,10 @@ const Dashboard = () => {
     if (!user) return;
     
     try {
+      // Use type assertion for our table
       const { error } = await supabase
         .from('profiles')
-        .update({ instagram_handle: instagramHandle })
+        .update({ instagram_handle: instagramHandle } as any)
         .eq('id', user.id);
       
       if (error) throw error;

@@ -52,6 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const fetchProfile = async (userId: string) => {
     try {
+      // Use TypeScript's type assertion to specify the expected table
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
