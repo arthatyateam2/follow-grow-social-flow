@@ -18,7 +18,7 @@ const Footer = () => {
               who are interested in your content. No bots, no fake accounts.
             </p>
             <div className="mt-4 flex items-center space-x-3">
-              <a href="#" className="text-gray-500 hover:text-gray-700">
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-gray-700">
                 <Instagram size={20} />
               </a>
             </div>
@@ -28,16 +28,16 @@ const Footer = () => {
             <h3 className="font-semibold text-gray-900 mb-3">Company</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/" className="text-gray-600 hover:text-gray-900">About</Link>
+                <a href="/" className="text-gray-600 hover:text-gray-900">About</a>
               </li>
               <li>
-                <Link to="/" className="text-gray-600 hover:text-gray-900">How it Works</Link>
+                <a href="/" className="text-gray-600 hover:text-gray-900">How it Works</a>
               </li>
               <li>
-                <Link to="/" className="text-gray-600 hover:text-gray-900">Pricing</Link>
+                <a href="/" className="text-gray-600 hover:text-gray-900">Pricing</a>
               </li>
               <li>
-                <Link to="/" className="text-gray-600 hover:text-gray-900">FAQ</Link>
+                <a href="/" className="text-gray-600 hover:text-gray-900">FAQ</a>
               </li>
             </ul>
           </div>
@@ -46,16 +46,16 @@ const Footer = () => {
             <h3 className="font-semibold text-gray-900 mb-3">Resources</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/" className="text-gray-600 hover:text-gray-900">Blog</Link>
+                <a href="/" className="text-gray-600 hover:text-gray-900">Blog</a>
               </li>
               <li>
-                <Link to="/" className="text-gray-600 hover:text-gray-900">Terms of Service</Link>
+                <a href="/" className="text-gray-600 hover:text-gray-900">Terms of Service</a>
               </li>
               <li>
-                <Link to="/" className="text-gray-600 hover:text-gray-900">Privacy Policy</Link>
+                <a href="/" className="text-gray-600 hover:text-gray-900">Privacy Policy</a>
               </li>
               <li>
-                <Link to="/" className="text-gray-600 hover:text-gray-900">Contact</Link>
+                <a href="/" className="text-gray-600 hover:text-gray-900">Contact</a>
               </li>
             </ul>
           </div>
